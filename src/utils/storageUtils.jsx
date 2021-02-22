@@ -1,5 +1,6 @@
 /*
 进行local数据存储管理的工具模块
+store用于存储数据的（存到浏览器持久化），在这里用于存储user数据
  */
 import store from 'store'
 const USER_KEY = 'user_key'

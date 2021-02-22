@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import './login.less'
-import logo from './images/logo.png'
-import { Form, Input, Button, Checkbox,Icon } from 'antd';
+import logo from '../../assets/imgages/logo.png'
+import { Form, Input, Button, Checkbox,Icon, message } from 'antd';
 import storageUtils from '../../utils/storageUtils'
 import memoryUtils from '../../utils/memoryUtils'
 import {reqLogin} from "../../api"
+import { Redirect } from 'react-router';
 const Item = Form.Item
 /**
  * 登录组件
@@ -26,7 +27,25 @@ class Login extends Component {
       if (!err) {
         // 校验成功
         const { username, password } = values
-        console.log('提交登陆请求', username, password)
+        // console.log('提交登陆请求', username, password)
+         const result=await reqLogin(username,password);
+         if(result===0){
+           //登录成功！
+           message.success('登录成功！')
+
+           //跳转到管理界面 （登录以后不需要回退登录界面了所以不用push 用replace）
+           this.props.history.replace('/')
+            
+          //保存user
+          const user=result.data
+           memoryUtils.user=user  //保存在内存
+           storageUtils.saveUser(user) //保存在本地
+           
+         }else{
+           //登录失败 提示错误信息
+           message.error(result.message);
+         }
+ 
       } else {
         // 校验失败 
         console.log(err)
@@ -67,6 +86,11 @@ class Login extends Component {
   };
 
   render() {
+   //如果已经登录了跳转管理界面不需要跳转当前界面
+   const user =memoryUtils.user
+     if (user&&user.id) {
+       return <Redirect to='/'/>
+     }
   // 得到具有强大功能的form对象
   const form = this.props.form;
   const {getFieldDecorator} = form;

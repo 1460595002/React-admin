@@ -9,13 +9,13 @@ import {message} from 'antd'
 import ajax from './ajax'
 
 // const BASE = 'http://localhost:5000/uuser'
-const BASE = ''
+const BASE = 'http://120.55.193.14:5000/'
 // 登陆
 /*
 export function reqLogin(username, password) {
   return ajax('/login', {username, password}, 'POST')
 }*/
-export const reqLogin = (username, password) => ajax(BASE + '/uuser/login', {username, password}, 'POST')
+export const reqLogin = (username, password) => ajax(BASE + '/user/login', {username, password}, 'POST')
 
 // 获取一级/二级分类的列表
 export const reqCategorys = (parentId) => ajax(BASE + '/manage/category/list', {parentId})
